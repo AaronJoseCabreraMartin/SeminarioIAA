@@ -38,7 +38,7 @@ int main (void) {
 	printf ("	-Manuel Andrés Carrera Galafante\n");
 	printf ("	-Aarón José Cabrera Martín\n");
 	printf ("	-Rafael Cala González\n");
-	printf ("--------------------------------------------------------------------\n\n");
+
 	
 	env = NewNeticaEnviron_ns (NULL, NULL, NULL);
 	res = InitNetica2_bn (env, mesg);
@@ -161,41 +161,135 @@ int main (void) {
 	CompileNet_bn (net);
 	CHKERR
 
+	int  opcion;
+	printf ("--------------------------------------------------------------------\n\n");
+	printf ("Eliga una opcion del menu:\n");
+	printf (" 1) Demostracion\n");
+	printf (" 2) Manual\n");
+	printf( "Introduzca cualquier otro numero para salir\n");
+	scanf("%d", &opcion);
+	switch (opcion)
+	{
+	case 1:{
+		// SACAR EL VALOR AL NODO StatePlusOne
+		belief = GetNodeBelief ("StatePlusOne", "Atacar", net);
+		CHKERR
 
-	// SACAR EL VALOR AL NODO StatePlusOne
-	belief = GetNodeBelief ("StatePlusOne", "Atacar", net);
-	CHKERR
+		printf ("La probabilidad de que inicialmente el bot ataque es %g% \n\n", belief*100);
 
-	printf ("La probabilidad de que inicialmente el bot ataque es %g\%\n\n", belief*100);
+		// DARLE EL VALOR "Si" A LA VARIABLE "NearEnemy"
+  		EnterFinding ("NearEnemy", "Si", net);			
+		
+		// SACAR EL VALOR AL NODO STATE+1 AL ATRIBUTO ATACAR  			
+		belief = GetNodeBelief ("StatePlusOne", "Atacar", net);			
+		CHKERR
+
+		printf ("Si hay un enemigo cerca, \n\
+          		la probabilidad de atacar en el siguiente instante es %g% \n\n", belief*100);
+
+		// DARLE EL VALOR "Bajo" A LA VARIABLE "Health"
+  		EnterFinding ("Health", "Bajo", net);
+
+		// SACAR EL VALOR AL NODO STATE+1 AL ATRIBUTO ATACAR
+  		belief = GetNodeBelief ("StatePlusOne", "Atacar", net);
+		CHKERR
+
+		printf ("Pero si además tenemos la vida baja, \n\
+          		la probabilidad de atacar en el siguiente instante es %g% \n\n", belief*100);
+			
+		break;
+		}
+		
+	case 2:{
+		printf("¿Qué valor le damos al nodo State? ( estado actual del bot)\n");
+		printf("0 = No espeficiado\n1 = Recoger Armas\n2 = Atacar\n");
+		printf("3 = Recoger Energia\n4 = Explorar\n5 = Huir\n6 = Detectar Peligro\n");
+		scanf("%d", &opcion);
+		switch (opcion)
+		{
+		case 1:
+			EnterFinding ("State", "RecogerArma", net);
+			break;
+		case 2:
+			EnterFinding ("State", "Atacar", net);
+			break;
+		case 3:
+			EnterFinding ("State", "RecogerEnergia", net);
+			break;
+		case 4:
+			EnterFinding ("State", "Explorar", net);
+			break;
+		case 5:
+			EnterFinding ("State", "Huir", net);
+			break;
+		case 6:
+			EnterFinding ("State", "DetectarPeligro", net);
+			break;
+		default:
+			break;
+		}
+
+		printf("¿Qué valor le damos al nodo Health? ( vida actual del bot)\n");
+		printf("0 = No espeficiado\n1 = Alta\n2 = Baja\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("Health", "Alto", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("Health", "Bajo", net);
+		}
+			
+		printf("¿Qué valor le damos al nodo HealthPackClose? ( Si hay o no un paquete de vida cerca del bot)\n");
+		printf("0 = No espeficiado\n1 = Si\n2 = No\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("HealthPackClose", "Si", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("HealthPackClose", "No", net);
+		}
 
 
-	// DARLE EL VALOR "Si" A LA VARIABLE "NearEnemy"
-  	EnterFinding ("NearEnemy", "Si", net);
+		// RESULTADO
 
-	// SACAR EL VALOR AL NODO STATE+1 AL ATRIBUTO ATACAR
-  	belief = GetNodeBelief ("StatePlusOne", "Atacar", net);
-	CHKERR
+		printf("Con las condiciones introducidas el bot hara en el siguiente instante :\n");
 
-	//printf ("Given an abnormal X-ray, \n\
-    //     the probability of tuberculosis is %g\n\n", belief);
-	printf ("Si hay un enemigo cerca, \n\
-          la probabilidad de atacar en el siguiente instante es %g\%\n\n", belief*100);
+		belief = GetNodeBelief ("StatePlusOne", "RecogerArma", net);		
+		CHKERR
+		printf ("Recoger armas, con probabilidad %g% \n", belief*100);
 
-	// DARLE EL VALOR "Bajo" A LA VARIABLE "Health"
-  	EnterFinding ("Health", "Bajo", net);
+		belief = GetNodeBelief ("StatePlusOne", "Atacar", net);			
+		CHKERR
+		printf ("Atacar, con probabilidad %g% \n", belief*100);
 
-	// SACAR EL VALOR AL NODO STATE+1 AL ATRIBUTO ATACAR
-  	belief = GetNodeBelief ("StatePlusOne", "Atacar", net);
-	CHKERR
+		belief = GetNodeBelief ("StatePlusOne", "RecogerEnergia", net);			
+		CHKERR
+		printf ("Recoger energia, con probabilidad %g% \n", belief*100);
 
-	printf ("Pero si además tenemos la vida baja, \n\
-          la probabilidad de atacar en el siguiente instante es %g\%\n\n", belief*100);
+		belief = GetNodeBelief ("StatePlusOne", "Explorar", net);			
+		CHKERR
+		printf ("Explorar, con probabilidad %g% \n", belief*100);
+
+		belief = GetNodeBelief ("StatePlusOne", "Huir", net);			
+		CHKERR
+		printf ("Huir, con probabilidad %g% \n", belief*100);
+
+		belief = GetNodeBelief ("StatePlusOne", "DetectarPeligro", net);			
+		CHKERR
+		printf ("Detectar peligro, con probabilidad %g% \n", belief*100);
+		break;
+	}
+
+	default:
+		break;
+	}
+	
+
+	
 
 end:
 	DeleteNet_bn (net);
 	res = CloseNetica_bn (env, mesg);
 	printf ("%s\n", mesg);
-	printf ("Press <enter> key to quit ", mesg);
+	printf ("Press <enter> key to quit \n", mesg);
 	getchar();
 	return (res < 0) ? -1 : 0;
 
