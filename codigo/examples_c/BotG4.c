@@ -13,6 +13,7 @@
  *
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "Netica.h"
@@ -201,6 +202,7 @@ int main (void) {
 		}
 		
 	case 2:{
+		// ASIGNAR VALORES AL NODO STATE
 		printf("¿Qué valor le damos al nodo State? ( estado actual del bot)\n");
 		printf("0 = No espeficiado\n1 = Recoger Armas\n2 = Atacar\n");
 		printf("3 = Recoger Energia\n4 = Explorar\n5 = Huir\n6 = Detectar Peligro\n");
@@ -229,6 +231,8 @@ int main (void) {
 			break;
 		}
 
+
+		// ASIGNAR VALORES AL NODO HEALTH
 		printf("¿Qué valor le damos al nodo Health? ( vida actual del bot)\n");
 		printf("0 = No espeficiado\n1 = Alta\n2 = Baja\n");
 		scanf("%d", &opcion);
@@ -237,7 +241,19 @@ int main (void) {
 		}else if (opcion == 2 ){
 			EnterFinding ("Health", "Bajo", net);
 		}
-			
+
+		// ASIGNAR VALORES AL NODO WEAPON
+		printf("¿Qué valor le damos al nodo Weapon? ( Si el bot se encuentra desarmado o armado)\n");
+		printf("0 = No espeficiado\n1 = Armado\n2 = Desarmado\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("Weapon", "Armado", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("Weapon", "Desarmado", net);
+		}
+
+
+		// ASIGNAR VALORES AL NODO HEALTHPACKCLOSE
 		printf("¿Qué valor le damos al nodo HealthPackClose? ( Si hay o no un paquete de vida cerca del bot)\n");
 		printf("0 = No espeficiado\n1 = Si\n2 = No\n");
 		scanf("%d", &opcion);
@@ -248,33 +264,76 @@ int main (void) {
 		}
 
 
+		// ASIGNAR VALORES AL NODO NEARENEMY
+		printf("¿Qué valor le damos al nodo NearEnemy? ( Si hay o no un oponente cerca del bot)\n");
+		printf("0 = No espeficiado\n1 = Si\n2 = No\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("NearEnemy", "Si", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("NearEnemy", "No", net);
+		}
+
+		// ASIGNAR VALORES AL NODO ENEMYWEAPON
+		printf("¿Qué valor le damos al nodo EnemyWeapon? ( Si el oponente del bot esta armado o no)\n");
+		printf("0 = No espeficiado\n1 = Armado\n2 = Desarmado\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("EnemyWeapon", "Armados", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("EnemyWeapon", "Desarmados", net);
+		}
+
+		// ASIGNAR VALORES AL NODO NEARWEAPON
+		printf("¿Qué valor le damos al nodo NearWeapon? ( Si hay un arma cerca del bot o no)\n");
+		printf("0 = No espeficiado\n1 = Si\n2 = No\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("NearWeapon", "Si", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("NearWeapon", "No", net);
+		}
+
+
+		
+		// ASIGNAR VALORES AL NODO HEARNOISE
+		printf("¿Qué valor le damos al nodo HearNoise? ( Si el bot escucha un ruido o no)\n");
+		printf("0 = No espeficiado\n1 = Si\n2 = No\n");
+		scanf("%d", &opcion);
+		if (opcion == 1){
+			EnterFinding ("HearNoise", "Si", net);
+		}else if (opcion == 2 ){
+			EnterFinding ("HearNoise", "No", net);
+		}
+
+
 		// RESULTADO
 
-		printf("Con las condiciones introducidas el bot hara en el siguiente instante :\n");
+		printf("\n\n\nCon las condiciones introducidas el bot hara en el siguiente instante :\n");
 
 		belief = GetNodeBelief ("StatePlusOne", "RecogerArma", net);		
 		CHKERR
-		printf ("Recoger armas, con probabilidad %g% \n", belief*100);
+		printf (" Recoger armas, con probabilidad %g% \n", belief*100);
 
 		belief = GetNodeBelief ("StatePlusOne", "Atacar", net);			
 		CHKERR
-		printf ("Atacar, con probabilidad %g% \n", belief*100);
+		printf (" Atacar, con probabilidad %g% \n", belief*100);
 
 		belief = GetNodeBelief ("StatePlusOne", "RecogerEnergia", net);			
 		CHKERR
-		printf ("Recoger energia, con probabilidad %g% \n", belief*100);
+		printf (" Recoger energia, con probabilidad %g% \n", belief*100);
 
 		belief = GetNodeBelief ("StatePlusOne", "Explorar", net);			
 		CHKERR
-		printf ("Explorar, con probabilidad %g% \n", belief*100);
+		printf (" Explorar, con probabilidad %g% \n", belief*100);
 
 		belief = GetNodeBelief ("StatePlusOne", "Huir", net);			
 		CHKERR
-		printf ("Huir, con probabilidad %g% \n", belief*100);
+		printf (" Huir, con probabilidad %g% \n", belief*100);
 
 		belief = GetNodeBelief ("StatePlusOne", "DetectarPeligro", net);			
 		CHKERR
-		printf ("Detectar peligro, con probabilidad %g% \n", belief*100);
+		printf (" Detectar peligro, con probabilidad %g% \n", belief*100);
 		break;
 	}
 
