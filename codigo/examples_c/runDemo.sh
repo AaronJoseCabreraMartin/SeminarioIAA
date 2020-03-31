@@ -2,5 +2,5 @@
 LD_LIBRARY_PATH=../lib
 export LD_LIBRARY_PATH
 
-echo "-----------------------------------   running Demo"
-./Demo
+echo "-----------------------------------   running BotG4"
+./BotG4
